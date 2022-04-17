@@ -1,0 +1,104 @@
+
+
+create database store ;
+-----------------
+
+use store ;
+create table users (
+id int primary key ,
+full_name varChar(20) , 
+email varchar(20) unique ,
+gender char(1)  ,
+date_of_birth varchar(15),
+created_at date ,
+check( gender in ('m' ,'f')) 
+);
+create table countries (
+code int primary key ,
+name varChar(20) unique , 
+continent_name varchar(20) not null
+
+);
+
+
+-----------------
+
+alter table users
+Add column country_code Int ;
+
+-----------------
+
+alter table users
+add foreign key (country_code) references countries (code)
+
+-----------------
+
+create table orders (
+id int primary key ,
+ user_id int , 
+ status varchar(6),
+ created_at date ,
+ check( status in ('start' ,'finish')) ,
+ foreign key (user_id) references users(id)
+
+);
+
+-----------------
+
+create table products (
+id int primary key ,
+ name varchar(10) not null , 
+ prise int  default 0 ,
+ status varchar(10),
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+ check( status in ('valid' ,'expired')) 
+ 
+);
+
+-----------------
+
+create table order_products (
+order_id int not null ,
+product_id int not null  ,
+quantity int default 0 ,
+ foreign key (order_id) references orders(id) , 
+  foreign key (product_id) references products(id) , 
+  UNIQUE (order_id, product_id)
+);
+
+-----------------
+
+insert into countries
+ values (123,"KSA", "Asia" )
+ -----------------
+
+ insert into users
+ values (1,"reenad alghofaili", "reenad@m.com" , 'f' , "1/1/1998" ,  '2022-12-31' ,123 )
+ 
+ -----------------
+
+ 
+ insert into orders
+ values (1, 1,  "start" , '2022-12-31' )
+ 
+  -----------------
+
+ insert into products
+ values (1, "dress", 100,  "valid" , '2022-12-31' )
+ 
+-----------------
+
+  
+ insert into order_products
+ values (1,1, 1 )
+ 
+ -----------------
+
+ 
+update countries set name = "saudi arabia" 
+where code = 123 ;
+
+-----------------
+
+-- we can not deleted becouse we have realtion in this table 
+delete from products where id = 1 
